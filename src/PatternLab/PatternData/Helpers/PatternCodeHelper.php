@@ -48,6 +48,25 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 		
 		// re-load the pattern data since we modified it
 		$store = PatternData::get();
+
+		/* rtl support start */
+		foreach (array_keys($store) as $patternStoreKey)
+		{
+			if ($store[$patternStoreKey]['isFile']) {
+				$store[$patternStoreKey]['patternTextDirection'] = 'ltr';
+				$store[$patternStoreKey . '-rtl'] = $store[$patternStoreKey];
+				$store[$patternStoreKey . '-rtl']['name'] .= '-rtl';
+				$store[$patternStoreKey . '-rtl']['pathDash'] .= '-rtl';
+				$store[$patternStoreKey . '-rtl']['patternTextDirection'] = 'rtl';
+				$store[$patternStoreKey . '-rtl']['nameDash'] .= '-rtl';
+				$store[$patternStoreKey . '-rtl']['nameClean'] .= ' (RTL)';
+				$store[$patternStoreKey . '-rtl']['partial'] .= '-rtl';
+			}
+		}
+		foreach ($store as $patternStoreKey => $patternStoreData) {
+			PatternData::setOption($patternStoreKey, $patternStoreData);
+		}
+		/* rtl support end */
 		
 		// load the pattern loader
 		$patternEngineBasePath   = PatternEngine::getInstance()->getBasePath();
@@ -82,6 +101,10 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 				$exportClean                      = (isset($options["exportClean"])) ? $options["exportClean"] : false;
 				$data["patternLabHead"]           = (!$this->exportFiles) ? $stringLoader->render(array("string" => $htmlHead, "data" => array("cacheBuster" => $data["cacheBuster"]))) : "";
 				$data["patternLabFoot"]           = (!$this->exportFiles) ? $stringLoader->render(array("string" => $htmlFoot, "data" => array("cacheBuster" => $data["cacheBuster"], "patternData" => json_encode($patternData)))) : "";
+
+				/* FLEXXEN!!!!!! */
+				$data['patternTextDirection'] = $store[$patternStoreKey]['patternTextDirection'];
+				/* FLEXXEN ENDS */
 				
 				if (isset($patternStoreData["patternRaw"])) {
 					
