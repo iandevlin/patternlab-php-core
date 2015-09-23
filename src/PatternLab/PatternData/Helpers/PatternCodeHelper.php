@@ -102,9 +102,9 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 				$data["patternLabHead"]           = (!$this->exportFiles) ? $stringLoader->render(array("string" => $htmlHead, "data" => array("cacheBuster" => $data["cacheBuster"]))) : "";
 				$data["patternLabFoot"]           = (!$this->exportFiles) ? $stringLoader->render(array("string" => $htmlFoot, "data" => array("cacheBuster" => $data["cacheBuster"], "patternData" => json_encode($patternData)))) : "";
 
-				/* FLEXXEN!!!!!! */
+				/* add text-direction */
 				$data['patternTextDirection'] = $store[$patternStoreKey]['patternTextDirection'];
-				/* FLEXXEN ENDS */
+				/* add text-direction end */
 				
 				if (isset($patternStoreData["patternRaw"])) {
 					
