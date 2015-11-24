@@ -194,6 +194,11 @@ class Config {
 		if (is_string(self::$options["styleGuideExcludes"])) {
 			self::$options["styleGuideExcludes"] = array();
 		}
+
+		// make sure styleguideExcludes is set to an array even if it's empty
+		if (is_string(self::$options["styleGuideIncludes"])) {
+			self::$options["styleGuideIncludes"] = array();
+		}
 		
 		// set the cacheBuster
 		self::$options["cacheBuster"] = (self::$options["cacheBusterOn"] == "false") ? 0 : time();

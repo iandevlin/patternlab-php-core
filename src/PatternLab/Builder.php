@@ -299,7 +299,7 @@ class Builder {
 			
 		// grab the partials into a data object for the style guide
 		$ppExporter                 = new PatternPartialsExporter();
-		$partials                   = $ppExporter->run();
+		$partials                   = $ppExporter->run("","","styleguide");
 		
 		// add the pattern data so it can be exported
 		$patternData = array();
