@@ -234,6 +234,10 @@ class Builder {
 		
 		// loop over the pattern data store to render the individual patterns
 		$store = PatternData::get();
+		// write out storedata
+		$file = 'storedata.txt';
+		file_put_contents($file, print_r($store, true));
+
 		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
 			if (($patternStoreData["category"] == "pattern") && (!$patternStoreData["hidden"])) {
