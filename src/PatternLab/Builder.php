@@ -249,6 +249,7 @@ class Builder {
 				$markup        = $patternStoreData["code"];
 				$markupEncoded = htmlentities($markup,ENT_COMPAT,"UTF-8");
 				$markupFull    = $patternStoreData["header"].$markup.$patternStoreData["footer"];
+				$markupRaw     = file_get_contents($patternSourceDir."/".$pathName.".".$patternExtension);
 				$markupEngine  = htmlentities(file_get_contents($patternSourceDir."/".$pathName.".".$patternExtension),ENT_COMPAT,"UTF-8");
 				
 				// if the pattern directory doesn't exist create it
@@ -261,6 +262,7 @@ class Builder {
 				if (!$exportFiles) {
 					file_put_contents($patternPublicDir."/".$path."/".$path.".escaped.html",$markupEncoded);
 					file_put_contents($patternPublicDir."/".$path."/".$path.".".$patternExtension,$markupEngine);
+					file_put_contents($patternPublicDir."/".$path."/".$path.".html.twig",$markupRaw);
 				}
 				/*
 				Not being used and should be moved to a plug-in
