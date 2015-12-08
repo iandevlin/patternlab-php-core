@@ -39,6 +39,7 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 		$patternPartials    = array();
 		$styleGuideExcludes = Config::getOption("styleGuideExcludes");
 		$styleGuideIncludes = Config::getOption("styleGuideIncludes");
+		$hotelsearchInludes = Config::getOption("hotelsearchPatterns");
 
 		$store = PatternData::get();
 		foreach ($store as $patternStoreKey => $patternStoreData) {
@@ -53,6 +54,7 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 					if ($mode == "styleguide" && !in_array($patternStoreData["nameDash"],$styleGuideIncludes)) {
 						continue;
 					}
+
 					$patternPartialData                            = array();
 					$patternPartialData["patternName"]             = ucwords($patternStoreData["nameClean"]);
 					$patternPartialData["patternLink"]             = $patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html";

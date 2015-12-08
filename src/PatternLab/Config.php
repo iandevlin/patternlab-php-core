@@ -195,11 +195,16 @@ class Config {
 			self::$options["styleGuideExcludes"] = array();
 		}
 
-		// make sure styleguideExcludes is set to an array even if it's empty
+		// make sure styleGuideIncludes is set to an array even if it's empty
 		if (is_string(self::$options["styleGuideIncludes"])) {
 			self::$options["styleGuideIncludes"] = array();
 		}
-		
+
+		// make sure hotelsearchPatterns is set to an array even if it's empty
+		if (is_string(self::$options["hotelsearchPatterns"])) {
+			self::$options["hotelsearchPatterns"] = array();
+		}
+
 		// set the cacheBuster
 		self::$options["cacheBuster"] = (self::$options["cacheBusterOn"] == "false") ? 0 : time();
 		

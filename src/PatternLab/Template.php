@@ -21,6 +21,7 @@ class Template {
 	protected static $htmlHead;
 	protected static $htmlFoot;
 	protected static $patternHead;
+	protected static $patternHeadHS;
 	protected static $patternFoot;
 	protected static $filesystemLoader;
 	protected static $patternLoader;
@@ -53,8 +54,10 @@ class Template {
 		
 		// gather the user-defined header and footer information
 		$patternHeadPath         = $sourceDir."/_meta/_00-head.".$patternExtension;
+		$patternHeadHSPath       = $sourceDir."/_meta/_00-head-hs.".$patternExtension;
 		$patternFootPath         = $sourceDir."/_meta/_01-foot.".$patternExtension;
 		self::$patternHead       = (file_exists($patternHeadPath)) ? file_get_contents($patternHeadPath) : "";
+		self::$patternHeadHS     = (file_exists($patternHeadHSPath)) ? file_get_contents($patternHeadHSPath) : "";
 		self::$patternFoot       = (file_exists($patternFootPath)) ? file_get_contents($patternFootPath) : "";
 		
 		// add the filesystemLoader
@@ -94,6 +97,13 @@ class Template {
 	 */
 	public static function getPatternHead() {
 		return self::$patternHead;
+	}
+
+	/*
+ 	* Get the pattern header for HS
+ 	*/
+	public static function getPatternHeadHS() {
+		return self::$patternHeadHS;
 	}
 	
 	/*

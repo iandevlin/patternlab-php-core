@@ -238,6 +238,8 @@ class Builder {
 		$file = 'storedata.txt';
 		file_put_contents($file, print_r($store, true));
 
+		$hotelsearchInludes = Config::getOption("hotelsearchPatterns");
+
 		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
 			if (($patternStoreData["category"] == "pattern") && (!$patternStoreData["hidden"])) {
@@ -248,7 +250,14 @@ class Builder {
 				// modify the pattern mark-up
 				$markup        = $patternStoreData["code"];
 				$markupEncoded = htmlentities($markup,ENT_COMPAT,"UTF-8");
-				$markupFull    = $patternStoreData["header"].$markup.$patternStoreData["footer"];
+
+				if (!in_array($patternStoreData["nameDash"],$hotelsearchInludes)) {
+					$markupFull    = $patternStoreData["header"].$markup.$patternStoreData["footer"];
+				}
+				else {
+					$markupFull    = $patternStoreData["headerHS"].$markup.$patternStoreData["footer"];
+				}
+
 				$markupRaw     = file_get_contents($patternSourceDir."/".$pathName.".".$patternExtension);
 				$markupEngine  = htmlentities(file_get_contents($patternSourceDir."/".$pathName.".".$patternExtension),ENT_COMPAT,"UTF-8");
 				
