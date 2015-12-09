@@ -17,6 +17,7 @@ use \PatternLab\Config;
 use \PatternLab\Data;
 use \PatternLab\Dispatcher;
 use \PatternLab\Parsers\Documentation;
+use \PatternLab\PatternData\Exporters\LookupPartialsExporter;
 use \PatternLab\PatternData\Exporters\NavItemsExporter;
 use \PatternLab\PatternData\Exporters\PatternPartialsExporter;
 use \PatternLab\PatternData\Exporters\PatternPathDestsExporter;
@@ -197,6 +198,12 @@ class Builder {
 		
 		// write out the data
 		file_put_contents($dataDir."/patternlab-data.js",$output);
+
+		// Load and write out the items for the partials lookup
+		$lpExporter   = new LookupPartialsExporter();
+		$lookup     = $lpExporter->run();
+		$lookupData = "module.exports = { lookup: " . json_encode($lookup) . "};";
+		file_put_contents($dataDir."/patternLabPartials.js",$lookupData);
 		
 		// note the end of the operation
 		$dispatcherInstance->dispatch("builder.generateIndexEnd");
@@ -234,6 +241,12 @@ class Builder {
 		
 		// loop over the pattern data store to render the individual patterns
 		$store = PatternData::get();
+		// write out storedata
+		$file = 'storedata.txt';
+		file_put_contents($file, print_r($store, true));
+
+		$hotelsearchInludes = Config::getOption("hotelsearchPatterns");
+
 		foreach ($store as $patternStoreKey => $patternStoreData) {
 			
 			if (($patternStoreData["category"] == "pattern") && (!$patternStoreData["hidden"])) {
@@ -244,7 +257,15 @@ class Builder {
 				// modify the pattern mark-up
 				$markup        = $patternStoreData["code"];
 				$markupEncoded = htmlentities($markup,ENT_COMPAT,"UTF-8");
-				$markupFull    = $patternStoreData["header"].$markup.$patternStoreData["footer"];
+
+				if (!in_array($patternStoreData["nameDash"],$hotelsearchInludes)) {
+					$markupFull    = $patternStoreData["header"].$markup.$patternStoreData["footer"];
+				}
+				else {
+					$markupFull    = $patternStoreData["headerHS"].$markup.$patternStoreData["footer"];
+				}
+
+				$markupRaw     = file_get_contents($patternSourceDir."/".$pathName.".".$patternExtension);
 				$markupEngine  = htmlentities(file_get_contents($patternSourceDir."/".$pathName.".".$patternExtension),ENT_COMPAT,"UTF-8");
 				
 				// if the pattern directory doesn't exist create it
@@ -257,6 +278,7 @@ class Builder {
 				if (!$exportFiles) {
 					file_put_contents($patternPublicDir."/".$path."/".$path.".escaped.html",$markupEncoded);
 					file_put_contents($patternPublicDir."/".$path."/".$path.".".$patternExtension,$markupEngine);
+					file_put_contents($patternPublicDir."/".$path."/".$path.".html.twig",$markupRaw);
 				}
 				/*
 				Not being used and should be moved to a plug-in
@@ -299,7 +321,7 @@ class Builder {
 			
 		// grab the partials into a data object for the style guide
 		$ppExporter                 = new PatternPartialsExporter();
-		$partials                   = $ppExporter->run();
+		$partials                   = $ppExporter->run("","","styleguide");
 		
 		// add the pattern data so it can be exported
 		$patternData = array();
