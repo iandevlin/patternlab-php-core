@@ -251,7 +251,7 @@ class Builder {
 				$markup        = $patternStoreData["code"];
 				$markupEncoded = htmlentities($markup,ENT_COMPAT,"UTF-8");
 
-				if (!in_array($patternStoreData["nameDash"],$hotelsearchInludes)) {
+				if (!in_array($patternStoreData["partial"],$hotelsearchInludes)) {
 					$markupFull    = $patternStoreData["header"].$markup.$patternStoreData["footer"];
 				}
 				else {
