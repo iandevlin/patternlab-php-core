@@ -52,12 +52,12 @@ class LineageHelper extends \PatternLab\PatternData\Helper {
 					
 					foreach ($foundLineages as $lineage) {
 						
-						if (PatternData::getOption($lineage)) {
-							
+						$lineageData = PatternData::getOption($lineage);
+						if ($lineageData) {
 							$patternLineages[] = array("lineagePattern" => $lineage,
-													   "lineagePath"    => "../../patterns/".$patternStoreData["pathDash"]."/".$patternStoreData["pathDash"].".html");
-							
-						} else {
+													   "lineagePath"    => "../../patterns/".$lineageData["pathDash"]."/".$lineageData["pathDash"].".html");
+						}
+						else {
 							
 							if (strpos($lineage, '/') === false) {
 								$fileName = $patternStoreData["pathName"].".".$patternExtension;
